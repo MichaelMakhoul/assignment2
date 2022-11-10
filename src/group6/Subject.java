@@ -1,8 +1,6 @@
 package group6;
 
-import static group6.Util.*;
 import java.util.Random;
-import java.util.stream.Stream;
 
 /**
  *
@@ -21,7 +19,7 @@ public class Subject {
         grade = grade();
     }
 
-    // Getters
+    // Accessors
     public int getSubjectID() {
         return subjectID;
     }
