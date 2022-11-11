@@ -5,6 +5,7 @@
  */
 package group6;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -71,8 +72,11 @@ public class Database {
         List<Student> temp = new ArrayList();
         try {
             temp.addAll(readStudents(filePath));
+        } catch (EOFException ex) {
+                    
         } catch (IOException | ClassNotFoundException ex) {
             System.out.println(Util.RED_BOLD+"Unable to read from file "+filename+Util.WHITE_BOLD);
+            System.out.println(ex);
         }
         
         return temp;
@@ -96,8 +100,4 @@ public class Database {
         objOut.close();
         fOut.close();
     }
-    
-//    public static void main(String[] args) {
-//        new Database();
-//    }
 }

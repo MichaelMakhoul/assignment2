@@ -3,8 +3,6 @@ package group6;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 
 /**
  *
@@ -28,6 +26,10 @@ public class Student implements Serializable{
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public int getStudentID() {
+        return studentID;
     }
 
     public String getEmail() {

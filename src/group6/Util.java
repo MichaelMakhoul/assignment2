@@ -38,12 +38,6 @@ public class Util {
         
         return m.find();
     }
-    
-    // Initializes the list with data from students.data file
-    public static void initList(List<Student> list){
-        Database d = new Database();
-        list = d.readStudents();
-    }
 
     public static final String BLACK_BOLD = "\033[1;30m";  // BLACK
     public static final String RED_BOLD = "\033[1;31m";    // RED
@@ -52,5 +46,5 @@ public class Util {
     public static final String BLUE_BOLD = "\033[1;34m";   // BLUE
     public static final String PURPLE_BOLD = "\033[1;35m"; // PURPLE
     public static final String CYAN_BOLD = "\033[1;36m";   // CYAN
-    public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
+    public static final String WHITE_BOLD = "\033[0m";  // WHITE
 }

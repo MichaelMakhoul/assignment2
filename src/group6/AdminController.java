@@ -17,8 +17,14 @@ public class AdminController {
     private List<Student> students = new ArrayList();
 
     public AdminController() {
-        Util.initList(students);
+        initList();
+        System.out.println(students);
 //        menu();
+    }
+    
+    public void initList(){
+        Database db = new Database();
+        students.addAll(db.readStudents());
     }
     
     // Group students by their grades 

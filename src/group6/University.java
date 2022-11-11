@@ -5,24 +5,20 @@
  */
 package group6;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author 236351
  */
 public class University {
-    private List<Student> students = new ArrayList();
     
     public static void main(String[] args){
         University u = new University();
         u.menu();
     }
 
-    public University() {
-        Util.initList(students);
-    }  
+//    public University() {
+//        Util.initList(students);
+//    }  
     
     private void adminSystem(){
         new AdminController();

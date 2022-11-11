@@ -8,7 +8,6 @@ package group6;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -18,8 +17,13 @@ public class StudentController {
     private List<Student> students = new ArrayList();
 
     public StudentController() {
-        Util.initList(students);
+        initList();
         menu();
+    }
+    
+    public void initList(){
+        Database db = new Database();
+        students.addAll(db.readStudents());
     }
     
     private boolean emailRegex(String email){
@@ -69,7 +73,9 @@ public class StudentController {
         
         Student student = login(email, password);
         
-        System.out.println(student);
+        if(student != null){
+            new CourseController(student);
+        }
     }
     
     // Updates students.data file after modifying the list
@@ -80,7 +86,6 @@ public class StudentController {
         } catch (IOException ex) {
             System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
         }
-        
     }
 
     // look up function to search students list by ID
@@ -112,13 +117,6 @@ public class StudentController {
         updateFile();
     }
     
-    private void enrol(){
-//        Student s = new Student();
-//        if(s.subjectMaxcapacity()){
-//            s.enrolSubject();
-//        }
-    }
-    
     public char readChoice() {
         System.out.print("\tChoice(l/r/x): ");
         return In.nextChar();
@@ -142,8 +140,8 @@ public class StudentController {
     }
 
     private void help() {
-        System.out.println("l - Login");
-        System.out.println("r - Register");
+        System.out.println("l - login");
+        System.out.println("r - register");
         System.out.println("x - exit");
     }
 }
