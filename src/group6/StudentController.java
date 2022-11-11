@@ -5,8 +5,10 @@
  */
 package group6;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -14,19 +16,146 @@ import java.util.List;
  */
 public class StudentController {
     private List<Student> students = new ArrayList();
+
+    public StudentController() {
+        initList(students);
+        menu();
+    }
+    
+    // Initializes the list with data from students.data file
+    private void initList(List<Student> list){
+        Database d = new Database();
+        list = d.readStudents();
+    }
+    
+    private boolean emailRegex(String email){
+        String emailRegex = ".*\\..*@university.com";
+        return Util.checkRegex(email, emailRegex);
+    }
+    
+    private boolean passwordRegex(String password){
+        String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
+        return Util.checkRegex(password, passwordRegex);
+    }
+    
+    private Student existingStudent(String email, String password){
+        return students.stream().
+        filter(p -> (p.getEmail().equals(email) && p.getPassword().equals(password))).
+        findAny().orElse(null);
+    }
+    
+    private boolean checkFormate(String email, String password){
+        if(emailRegex(email) && passwordRegex(password)){
+            System.out.println(Util.YELLOW_BOLD+"email and password format acceptable"+Util.WHITE_BOLD);
+            return true;
+        } else {
+            System.err.println(Util.RED_BOLD+"Incorrect email or password format"+Util.WHITE_BOLD); 
+            return false;
+        }
+    }
+    
+    private Student login(String email, String password){
+        Student student = existingStudent(email, password);
+        
+        if(student == null){
+            System.out.println(Util.RED_BOLD+"Student does not exist"+Util.WHITE_BOLD);            
+        } else {
+            return student; 
+        }
+        
+        return null;
+    }
     
     
+    private void login(){
+        String email;
+        String password;
+        
+        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+        
+        Student student = login(email, password);
+        
+        System.out.println(student);
+    }
     
-//    private void register(){
-//        String email = Util.readString("Email: ");
-//        String password = Util.readString("Password: ");
-//        String emailRegex = ".*\\..*@university.com";
-//        String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
-//        
-//        while(Util.checkRegex(email, emailRegex) && Util.checkRegex(password, passwordRegex)){
-//            
+    // Updates students.data file after modifying the list
+    private void updateFile(){
+            Database db = new Database();
+        try {
+            db.save(students);
+        } catch (IOException ex) {
+            System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
+        }
+        
+    }    
+    
+    // Generates random numbers between two numbers
+    private int generatRand(int min, int max) {
+        return new Random().ints(min, max + 1).findAny().getAsInt();
+    }
+
+    // look up function to search students list by ID
+    private Student student(int ID) {
+        return students.stream().filter(p -> p.matchID(ID)).findAny().orElse(null);
+    }
+    
+    // Generates unique subjectID
+    private int uniqueStudentID() {
+        int ID = generatRand(1, 999999);
+
+        while (student(ID) != null) {
+            return generatRand(1, 999999);
+        }
+
+        return ID;
+    }
+    
+    private void register(String email, String password){
+        String name = Util.readString("Name: ");
+        
+        students.add(new Student(uniqueStudentID(), name, email, password));
+    }
+    
+    private void register(){
+        String email;
+        String password;
+        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+        register(email, password);
+        updateFile();
+    }
+    
+    private void enrol(){
+//        Student s = new Student();
+//        if(s.subjectMaxcapacity()){
+//            s.enrolSubject();
 //        }
-//        
-//        students.add(new Student(ID, name, email, password));
-//    }
+    }
+    
+    public char readChoice() {
+        System.out.print("\tChoice(l/r/x): ");
+        return In.nextChar();
+    }
+    
+    private void menu() {
+        char c;
+        while ((c = Character.toLowerCase(readChoice())) != 'x') {
+            switch (c) {
+                case 'l':
+                    login();
+                    break;
+                case 'r':
+                    register();
+                    break;
+                default:
+                    help();
+                    break;
+            }
+        }
+    }
+
+    private void help() {
+        System.out.println("l - Login");
+        System.out.println("r - Register");
+        System.out.println("x - exit");
+    }
 }

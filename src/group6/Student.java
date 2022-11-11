@@ -20,6 +20,8 @@ public class Student {
     private String password;
     private List<Subject> subjects;
 
+//    public Student() {}
+    
     public Student(int ID, String name, String email, String password) {
         this.studentID = ID;
         this.name = name;
@@ -27,6 +29,14 @@ public class Student {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    
     // Generates random numbers between two numbers
     private int generatRand(int min, int max) {
         return new Random().ints(min, max + 1).findAny().getAsInt();
@@ -62,12 +72,12 @@ public class Student {
     }
 
     // Checks subject list maximum capacity
-    private boolean subjectMaxcapacity() {
-        return subjects.size() <= MAX_SUBJECTS_NUMBER;
+    public boolean subjectMaxcapacity() {
+        return subjects.size() < MAX_SUBJECTS_NUMBER;
     }
 
     // Enrol subjects
-    private void enrolSubjet() {
+    public void enrolSubject() {
         subjects.add(new Subject(uniqueSubjectID()));
     }
 
@@ -98,16 +108,30 @@ public class Student {
         this.password = password;
     }
     
+    // Search for student by ID
+    public boolean matchID(int ID){
+        return this.studentID == ID;
+    }
+    
+//    // Search for student by email
+//    public boolean matchEmail(String email){
+//        return this.email.equals(email);
+//    }
+//    
+//    // Search for student by password
+//    public boolean matchPassword(String password){
+//        return this.password.equals(password);
+//    }
+    
     @Override
     public String toString() {
-        return String.format("%-15s :: %06d --> Email: %s", name, studentID, email);
+        return String.format("%-20s :: %06d --> Email: %s", name, studentID, email);
     }
 
-    public static void main(String[] args) {
-        Student s = new Student(10, "John Adamsassf", "john.adams@university.com", "Helloworld123456");
-        Student d = new Student(15320, "Aleana Rohdes", "john.rhodessmih@university.com", "Helloworld123456");
-        System.out.println(s);
-        System.out.println(d);
-
-    }
+//    public static void main(String[] args) {
+//        Student s = new Student(10, "John Adamsassf", "john.adams@university.com", "Helloworld123456");
+//        Student d = new Student(15320, "Aleana Rohdes", "john.rhodessmih@university.com", "Helloworld123456");
+//        System.out.println(s);
+//        System.out.println(d);
+//    }
 }

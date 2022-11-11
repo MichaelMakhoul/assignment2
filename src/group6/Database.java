@@ -25,6 +25,10 @@ import java.util.List;
 public class Database {
     private String filename = "students.data";
     private Path filePath;
+
+    public Database() {
+        setup();
+    }
     
     // Checks if the file 'students.data exists' before creating it
     private void setup() {
@@ -40,7 +44,9 @@ public class Database {
 
     //saving objects to a file
     public void save(List<Student> list) throws FileNotFoundException, IOException {
-        FileOutputStream fileOut = new FileOutputStream(filename);
+        File file = filePath.toFile();
+        System.out.println("File path: "+file);
+        FileOutputStream fileOut = new FileOutputStream(file);
         ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
 
         objOut.writeObject(list);
@@ -49,7 +55,7 @@ public class Database {
         fileOut.close();
     }
     
-    private List<Student> readPlayers(Path path) throws FileNotFoundException, IOException, ClassNotFoundException {
+    private List<Student> readStudents(Path path) throws FileNotFoundException, IOException, ClassNotFoundException {
         File file = path.toFile();
         FileInputStream fileIn = new FileInputStream(file);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -61,23 +67,38 @@ public class Database {
 
         return temp;
     }
+    
+    public List<Student> readStudents(){
+        List<Student> temp = new ArrayList();
+        try {
+            temp.addAll(readStudents(filePath));
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println(Util.RED_BOLD+"Unable to read from file "+filename+Util.WHITE_BOLD);
+        }
+        
+        return temp;
+    }
 
     private void show() throws IOException, FileNotFoundException, ClassNotFoundException {
-        List<Student> temp = readPlayers(filePath);
+        List<Student> temp = readStudents(filePath);
         temp.forEach(System.out::println);
     }
 
-    private void clear() throws FileNotFoundException, IOException {
+    public void clear() throws FileNotFoundException, IOException {
         File f = filePath.toFile();
+        
         FileOutputStream fOut = new FileOutputStream(f);
         ObjectOutputStream objOut = new ObjectOutputStream(fOut);
+        
         objOut.writeObject(new ArrayList<Student>());
-//        players.clear();
+
+//        subjects.clear();
+
         objOut.close();
         fOut.close();
     }
     
-    public static void main(String[] args) {
-        new Database().setup();
-    }
+//    public static void main(String[] args) {
+//        new Database();
+//    }
 }
