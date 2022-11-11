@@ -1,12 +1,13 @@
 package group6;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  *
  * @author 236351
  */
-public class Subject {
+public class Subject implements Serializable{
 
     // Subject Fields
     private int subjectID;

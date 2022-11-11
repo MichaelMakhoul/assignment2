@@ -45,7 +45,6 @@ public class Database {
     //saving objects to a file
     public void save(List<Student> list) throws FileNotFoundException, IOException {
         File file = filePath.toFile();
-        System.out.println("File path: "+file);
         FileOutputStream fileOut = new FileOutputStream(file);
         ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
 

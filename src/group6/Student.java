@@ -1,5 +1,6 @@
 package group6;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,7 +10,7 @@ import java.util.Random;
  *
  * @author 236351
  */
-public class Student {
+public class Student implements Serializable{
     
     static int MAX_SUBJECTS_NUMBER = 4;
 
