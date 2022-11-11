@@ -33,7 +33,7 @@ public class Database {
             try {
                 Files.createFile(filePath);
             } catch (IOException ex) {
-                System.out.println("Unable to create file "+filename);
+                System.out.println(Util.RED_BOLD+"Unable to create file "+filename+Util.WHITE_BOLD);
             }
         }
     }
@@ -75,5 +75,9 @@ public class Database {
 //        players.clear();
         objOut.close();
         fOut.close();
+    }
+    
+    public static void main(String[] args) {
+        new Database().setup();
     }
 }
