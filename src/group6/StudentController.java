@@ -18,14 +18,8 @@ public class StudentController {
     private List<Student> students = new ArrayList();
 
     public StudentController() {
-        initList(students);
+        Util.initList(students);
         menu();
-    }
-    
-    // Initializes the list with data from students.data file
-    private void initList(List<Student> list){
-        Database d = new Database();
-        list = d.readStudents();
     }
     
     private boolean emailRegex(String email){
@@ -87,11 +81,6 @@ public class StudentController {
             System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
         }
         
-    }    
-    
-    // Generates random numbers between two numbers
-    private int generatRand(int min, int max) {
-        return new Random().ints(min, max + 1).findAny().getAsInt();
     }
 
     // look up function to search students list by ID
@@ -101,10 +90,10 @@ public class StudentController {
     
     // Generates unique subjectID
     private int uniqueStudentID() {
-        int ID = generatRand(1, 999999);
+        int ID = Util.generatRand(1, 999999);
 
         while (student(ID) != null) {
-            return generatRand(1, 999999);
+            return Util.generatRand(1, 999999);
         }
 
         return ID;
@@ -112,7 +101,6 @@ public class StudentController {
     
     private void register(String email, String password){
         String name = Util.readString("Name: ");
-        
         students.add(new Student(uniqueStudentID(), name, email, password));
     }
     

@@ -38,11 +38,6 @@ public class Student implements Serializable{
         return password;
     }
     
-    // Generates random numbers between two numbers
-    private int generatRand(int min, int max) {
-        return new Random().ints(min, max + 1).findAny().getAsInt();
-    }
-
     // look up function to search subjects list by ID
     private Subject subject(int ID) {
         return subjects.stream().filter(p -> p.match(ID)).findAny().orElse(null);
@@ -63,10 +58,10 @@ public class Student implements Serializable{
 
     // Generates unique subjectID
     private int uniqueSubjectID() {
-        int ID = generatRand(1, 999);
+        int ID = Util.generatRand(1, 999);
 
         while (subject(ID) != null) {
-            return generatRand(1, 999);
+            return Util.generatRand(1, 999);
         }
 
         return ID;
@@ -87,10 +82,11 @@ public class Student implements Serializable{
         List<Subject> toDelete = subjects(ID);
         if (toDelete.size() > 0) {
             subjects.removeAll(toDelete);
-            System.out.println(Util.YELLOW_BOLD+"Droping Subject-"+ID);
-            System.out.println(Util.YELLOW_BOLD+"You are now enrolled in "+subjects.size()+" out of "+MAX_SUBJECTS_NUMBER+" subjects");
+            System.out.println(Util.YELLOW_BOLD+"Droping Subject-"+ID+Util.WHITE_BOLD);
+            System.out.println(Util.YELLOW_BOLD+"You are now enrolled in "+subjects.size()
+                                +" out of "+MAX_SUBJECTS_NUMBER+" subjects"+Util.WHITE_BOLD);
         }else{
-            System.out.println("Subject-"+ID+" is not in your enrolment list");
+            System.out.println(Util.RED_BOLD+"Subject-"+ID+" is not in your enrolment list"+Util.WHITE_BOLD);
         }
     }
 

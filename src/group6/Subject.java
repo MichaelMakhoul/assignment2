@@ -16,7 +16,7 @@ public class Subject implements Serializable{
 
     public Subject(int ID) {
         subjectID = ID;
-        mark = generatRand(25, 100);
+        mark = Util.generatRand(25, 100);
         grade = grade();
     }
 
@@ -32,11 +32,6 @@ public class Subject implements Serializable{
     // Search for subject by ID
     public boolean match(int ID){
         return this.subjectID == ID;
-    }
-    
-    // Generates random numbers between two numbers
-    private int generatRand(int min, int max) {
-        return new Random().ints(min, max+1).findAny().getAsInt();
     }
     
     // Determins the grade based on mark

@@ -5,11 +5,30 @@
  */
 package group6;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author 236351
  */
 public class University {
+    private List<Student> students = new ArrayList();
+    
+    public static void main(String[] args){
+        University u = new University();
+        u.menu();
+    }
+
+    public University() {
+        initList();
+    }
+    
+    // Initializes the list with data from students.data file
+    private void initList(){
+        Database d = new Database();
+        students = d.readStudents();
+    }
     
     private void adminSystem(){
         new AdminController();
@@ -46,10 +65,5 @@ public class University {
         System.out.println("A - admin");
         System.out.println("s - student");
         System.out.println("x - exit");
-    }
-    
-    public static void main(String[] args){
-        University u = new University();
-        u.menu();
     }
 }

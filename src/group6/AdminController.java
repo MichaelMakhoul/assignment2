@@ -17,13 +17,8 @@ public class AdminController {
     private List<Student> students = new ArrayList();
 
     public AdminController() {
-        initList(students);
-    }
-    
-    // Initializes the list with data from students.data file
-    private void initList(List<Student> list){
-        Database d = new Database();
-        list = d.readStudents();
+        Util.initList(students);
+//        menu();
     }
     
     // Group students by their grades 

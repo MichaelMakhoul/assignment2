@@ -5,6 +5,8 @@
  */
 package group6;
 
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,12 +26,23 @@ public class Util {
         System.out.print(prompt);
         return In.nextLine();
     }
+    
+    // Generates random numbers between two numbers
+    public static int generatRand(int min, int max) {
+        return new Random().ints(min, max + 1).findAny().getAsInt();
+    }
 
     public static boolean checkRegex(String input, String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(input);
         
         return m.find();
+    }
+    
+    // Initializes the list with data from students.data file
+    public static void initList(List<Student> list){
+        Database d = new Database();
+        list = d.readStudents();
     }
 
     public static final String BLACK_BOLD = "\033[1;30m";  // BLACK
