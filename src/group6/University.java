@@ -21,14 +21,8 @@ public class University {
     }
 
     public University() {
-        initList();
-    }
-    
-    // Initializes the list with data from students.data file
-    private void initList(){
-        Database d = new Database();
-        students = d.readStudents();
-    }
+        Util.initList(students);
+    }  
     
     private void adminSystem(){
         new AdminController();
