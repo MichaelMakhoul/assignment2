@@ -5,7 +5,6 @@
  */
 package group6;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,26 +15,19 @@ import java.util.List;
 public class StudentController {
     private List<Student> students = new ArrayList();
 
+    // Constructor
     public StudentController() {
         initList();
         menu();
     }
     
+    // Initialize students list with data from students.data file
     public void initList(){
         Database db = new Database();
         students.addAll(db.readStudents());
     }
     
-    private boolean emailRegex(String email){
-        String emailRegex = ".*\\..*@university.com";
-        return Util.checkRegex(email, emailRegex);
-    }
-    
-    private boolean passwordRegex(String password){
-        String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
-        return Util.checkRegex(password, passwordRegex);
-    }
-    
+    // Check if the student exists 
     private Student existingStudent(String email, String password){
         return students.stream().
         filter(p -> (p.getEmail().equals(email) && p.getPassword().equals(password))).
@@ -43,7 +35,7 @@ public class StudentController {
     }
     
     private boolean checkFormate(String email, String password){
-        if(emailRegex(email) && passwordRegex(password)){
+        if(Util.emailRegex(email) && Util.passwordRegex(password)){
             System.out.println(Util.YELLOW_BOLD+"email and password format acceptable"+Util.WHITE_BOLD);
             return true;
         } else {
@@ -55,15 +47,14 @@ public class StudentController {
     private Student login(String email, String password){
         Student student = existingStudent(email, password);
         
-        if(student == null){
-            System.out.println(Util.RED_BOLD+"Student does not exist"+Util.WHITE_BOLD);            
+        if(student != null){
+            return student;             
         } else {
-            return student; 
+            System.out.println(Util.RED_BOLD+"Student does not exist"+Util.WHITE_BOLD);
         }
         
         return null;
     }
-    
     
     private void login(){
         String email;
@@ -74,17 +65,7 @@ public class StudentController {
         Student student = login(email, password);
         
         if(student != null){
-            new CourseController(student);
-        }
-    }
-    
-    // Updates students.data file after modifying the list
-    private void updateFile(){
-            Database db = new Database();
-        try {
-            db.save(students);
-        } catch (IOException ex) {
-            System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
+            new CourseController(student.getStudentID());
         }
     }
 
@@ -114,7 +95,7 @@ public class StudentController {
         String password;
         while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
         register(email, password);
-        updateFile();
+        Util.updateFile(students);
     }
     
     public char readChoice() {

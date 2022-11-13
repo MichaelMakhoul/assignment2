@@ -27,6 +27,11 @@ public class Subject implements Serializable{
     public int getMark() {
         return mark;
     }
+    
+    // Returns subject's name
+    public String getName(){
+        return "Subject-"+subjectID;
+    }
 
     // Search for subject by ID
     public boolean match(int ID){

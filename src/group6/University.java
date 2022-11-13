@@ -15,10 +15,6 @@ public class University {
         University u = new University();
         u.menu();
     }
-
-//    public University() {
-//        Util.initList(students);
-//    }  
     
     private void adminSystem(){
         new AdminController();
@@ -28,7 +24,7 @@ public class University {
         new StudentController();
     }
     
-    public char readChoice() {
+    public static char readChoice() {
         System.out.print("University System: (A)dmin, (S)tudent, or X: ");
         return In.nextChar();
     }

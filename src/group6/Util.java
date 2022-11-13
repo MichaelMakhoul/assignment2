@@ -5,6 +5,7 @@
  */
 package group6;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -37,6 +38,26 @@ public class Util {
         Matcher m = p.matcher(input);
         
         return m.find();
+    }
+    
+    public static boolean emailRegex(String email){
+        String emailRegex = ".*\\..*@university.com";
+        return Util.checkRegex(email, emailRegex);
+    }
+    
+    public static boolean passwordRegex(String password){
+        String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
+        return checkRegex(password, passwordRegex);
+    }
+    
+    // Updates students.data file after modifying the list
+    public static void updateFile(List<Student> list){
+            Database db = new Database();
+        try {
+            db.save(list);
+        } catch (IOException ex) {
+            System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
+        }
     }
 
     public static final String BLACK_BOLD = "\033[1;30m";  // BLACK

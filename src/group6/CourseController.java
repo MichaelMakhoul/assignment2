@@ -5,7 +5,6 @@
  */
 package group6;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,28 +16,39 @@ public class CourseController {
     Student student;
     private List<Student> students = new ArrayList();
     
-    public CourseController(Student s) {
-        this.student = s;
+    // Constructor 
+    public CourseController(int ID) {
+        initList();
+        this.student = setSession(ID);
         menu();
+    }
+    
+    // Initialize students list with data from students.data file
+    public void initList(){
+        Database db = new Database();
+        students.addAll(db.readStudents());
+    }
+    
+    private Student setSession(int ID){
+        return students.stream().filter(s -> s.getStudentID() == ID).findAny().orElse(null);
     }
     
     // Updates students.data file after modifying the list
     private void updateList(Student s){
+        
         int position = students.indexOf(s);
         students.set(position, student);
         
-        Database db = new Database();
-        
-        try {
-            db.save(students);
-        } catch (IOException ex) {
-            System.out.println(Util.RED_BOLD+"Unable to save data to students.data file"+Util.WHITE_BOLD);
-        }
+        Util.updateFile(students);
     }
     
     private void enrol(){
-        if(student.subjectMaxcapacity()){
+        if(student.checkMaxCapacity()){
+            System.out.println(student);
             student.enrolSubject();
+            updateList(student);
+        }else{
+            System.out.println(Util.RED_BOLD+"Students are allowed to enrol in 4 subjects only"+Util.WHITE_BOLD);
         }
         
     }
@@ -46,17 +56,30 @@ public class CourseController {
     private void change(){
         String newPassword = Util.readString("New Password: ");
         String confirmPassword;
+        
+        // Passwords match
         while(!(confirmPassword = Util.readString("Confirm password: ")).equals(newPassword)){
             System.out.println(Util.RED_BOLD+"Password does not match - try again"+Util.WHITE_BOLD);
         }
         
-        student.setPassword(confirmPassword);
-//        updateList(student);
+        // Check regex 
+        if(Util.passwordRegex(newPassword) && Util.passwordRegex(confirmPassword)){
+            student.setPassword(newPassword);
+            updateList(student);
+        }else{
+            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
+        }
     }
     
-    private void remove(){}
+    private void remove(){
+        int ID = Util.readNumber("Remove Subject by ID: ");
+        student.dropSubject(ID);
+        updateList(student);
+    }
     
-    private void show(){}
+    private void show(){
+        student.showSubjects();
+    }
     
     public char readChoice() {
         System.out.print("\t\tChoice(c/e/r/s/x): ");

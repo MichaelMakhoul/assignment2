@@ -27,6 +27,7 @@ public class Database {
     private String filename = "students.data";
     private Path filePath;
 
+    // Constructor 
     public Database() {
         setup();
     }
@@ -94,8 +95,6 @@ public class Database {
         ObjectOutputStream objOut = new ObjectOutputStream(fOut);
         
         objOut.writeObject(new ArrayList<Student>());
-
-//        subjects.clear();
 
         objOut.close();
         fOut.close();

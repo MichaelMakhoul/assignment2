@@ -18,10 +18,11 @@ public class AdminController {
 
     public AdminController() {
         initList();
-        System.out.println(students);
+        students.forEach(System.out::println);
 //        menu();
     }
     
+    // Initialize students list with data from students.data file
     public void initList(){
         Database db = new Database();
         students.addAll(db.readStudents());
