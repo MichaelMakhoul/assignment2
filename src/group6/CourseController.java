@@ -88,7 +88,7 @@ public class CourseController {
     
     private void menu() {
         char c;
-        while ((c = Character.toLowerCase(readChoice())) != 'x') {
+        while ((c = readChoice()) != 'x') {
             switch (c) {
                 case 'c':
                     change();

@@ -116,12 +116,12 @@ public class Student implements Serializable {
     }
 
     // Calculates the average mark of all subjects
-    private double averageMark() {
+    public double averageMark() {
         return subjects.stream().mapToInt(s -> s.getMark()).average().getAsDouble();
     }
 
     // Checks if the student fail or pass based on the average mark
-    private boolean passed() {
+    public boolean passed() {
         return averageMark() >= 50;
     }
 
@@ -134,8 +134,6 @@ public class Student implements Serializable {
         System.out.println(Util.YELLOW_BOLD+"Showing "+numberOfSubjects()+" subjects"+Util.WHITE_BOLD);
         subjects.forEach(System.out::println);
     }
-    
-    
 
 //    // Search for student by email
 //    public boolean matchEmail(String email){
@@ -149,6 +147,6 @@ public class Student implements Serializable {
     
     @Override
     public String toString() {
-        return String.format("%-20s :: %06d --> Email: %s", name, studentID, email + "  " +subjects + "  " +password);
+        return String.format("%-20s :: %06d --> Email: %s", name, studentID, email);
     }
 }

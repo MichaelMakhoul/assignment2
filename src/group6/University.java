@@ -32,12 +32,12 @@ public class University {
     // Menu --> University System: (A)dmin, (S)tudent, or X: 
     private void menu() {
         char c;
-        while ((c = Character.toLowerCase(readChoice())) != 'x') {
+        while ((c = readChoice()) != 'X') {
             switch (c) {
-                case 'a':
+                case 'A':
                     adminSystem();
                     break;
-                case 's':
+                case 'S':
                     studentSystem();
                     break;
                 default:
@@ -45,11 +45,13 @@ public class University {
                     break;
             }
         }
+        
+        System.out.println(Util.YELLOW_BOLD+"Thank You"+Util.WHITE_BOLD);
     }
 
     private void help() {
         System.out.println("A - admin");
-        System.out.println("s - student");
-        System.out.println("x - exit");
+        System.out.println("S - student");
+        System.out.println("X - exit");
     }
 }

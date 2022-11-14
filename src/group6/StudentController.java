@@ -36,10 +36,10 @@ public class StudentController {
     
     private boolean checkFormate(String email, String password){
         if(Util.emailRegex(email) && Util.passwordRegex(password)){
-            System.out.println(Util.YELLOW_BOLD+"email and password format acceptable"+Util.WHITE_BOLD);
+            System.out.println(Util.YELLOW_BOLD+"\temail and password format acceptable"+Util.WHITE_BOLD);
             return true;
         } else {
-            System.err.println(Util.RED_BOLD+"Incorrect email or password format"+Util.WHITE_BOLD); 
+            System.err.println(Util.RED_BOLD+"\tIncorrect email or password format"+Util.WHITE_BOLD); 
             return false;
         }
     }
@@ -50,7 +50,7 @@ public class StudentController {
         if(student != null){
             return student;             
         } else {
-            System.out.println(Util.RED_BOLD+"Student does not exist"+Util.WHITE_BOLD);
+            System.out.println(Util.RED_BOLD+"\tStudent does not exist"+Util.WHITE_BOLD);
         }
         
         return null;
@@ -105,7 +105,7 @@ public class StudentController {
     
     private void menu() {
         char c;
-        while ((c = Character.toLowerCase(readChoice())) != 'x') {
+        while ((c = readChoice()) != 'x') {
             switch (c) {
                 case 'l':
                     login();
@@ -121,8 +121,8 @@ public class StudentController {
     }
 
     private void help() {
-        System.out.println("l - login");
-        System.out.println("r - register");
-        System.out.println("x - exit");
+        System.out.println("\tl - login");
+        System.out.println("\tr - register");
+        System.out.println("\tx - exit");
     }
 }
