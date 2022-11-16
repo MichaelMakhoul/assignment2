@@ -85,15 +85,37 @@ public class StudentController {
         return ID;
     }
     
+    // look up function to search students list by email
+    private Student emailExists(String email) {
+        return students.stream().filter(p -> p.matchEmail(email)).findAny().orElse(null);
+    }
+    
     private void register(String email, String password){
         String name = Util.readString("Name: ");
         students.add(new Student(uniqueStudentID(), name, email, password));
     }
     
+//    private void register(){
+//        String email;
+//        String password;
+//        System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
+//       
+//        while(emailExists(email = Util.readString("Email: ")) !=null){
+//          System.out.println(Util.RED_BOLD+"\t"+"Email already exists"+Util.WHITE_BOLD);  
+//        
+//        }
+//         while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+//        register(email, password);
+//        Util.updateFile(students);
+//    }
+    
     private void register(){
         String email;
         String password;
         while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+//        while(emailExists() != null){
+//            email = Util.readString("Email: ");
+//        }
         register(email, password);
         Util.updateFile(students);
     }

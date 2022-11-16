@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -30,29 +32,29 @@ public class AdminController {
         students.addAll(db.readStudents());
     }
     
-   // Group students by their grades
-    private Map<Double, List<Student>> groupByGrades(List<Student> list) {
-        return students.stream().collect(Collectors.groupingBy(Student::averageMark));
+    // Returns a list of name, ID, grade and average mark for each student. used when grouping students by grade.
+    private List<String> detailsList(List<Student> list){
+        List<String> temp = new ArrayList();
+        for (Student student : list) {
+            temp.add(student.getStudentsDetails());
+        }
+        
+        return temp;
     }
     
-    public String getGrade(double mark) {
-        return  mark >= 85 ? "HD":
-                mark >= 75 ? "D" :
-                mark >= 65 ? "C" :
-                mark >= 50 ? "P" : "Z";
+    // Group students by their grades
+    private Map<String, List<Student>> groupByGrades(List<Student> list) {
+        return list.stream().filter(Student::hasEnrolled).collect(Collectors.groupingBy(Student::getGrade));
     }
     
     private void groupByGrades(){
         System.out.println(Util.YELLOW_BOLD+"Grade Grouping"+Util.WHITE_BOLD);
         
-        Map<Double, List<Student>> map = groupByGrades(students);
-        
-        System.out.println(Util.YELLOW_BOLD+"Student List"+Util.WHITE_BOLD);
+        Map<String, List<Student>> map = groupByGrades(students);
         
         if(map.size() > 0){
-            map.forEach((m, v) -> {
-                String g = getGrade(m);
-                System.out.println(g +" --> "+ v + " --> Grade:  "+ g + " - MARK: " + m);
+            map.forEach((g, v) -> {
+                System.out.println(g + " --> " + detailsList(v));
             });
         } else {
             System.out.println("\t< Nothing to Display >");
@@ -61,7 +63,7 @@ public class AdminController {
     
     // Partition students to pass or fail   ---- Use 'Collectors.partitioningBy' method and passed function from Student class ----
     private Map<Boolean, List<Student>> partition(List<Student> list) {
-        return list.stream().collect(Collectors.partitioningBy(s -> s.passed()));
+        return list.stream().filter(Student::hasEnrolled).collect(Collectors.partitioningBy(Student::passed));
     }
     
     private void partition(){
@@ -92,9 +94,12 @@ public class AdminController {
     private void removeStudent(int ID) {
         List<Student> toDelete = students(ID);
         
-        students.removeAll(toDelete);
-        
-        Util.updateFile(students);
+        if(toDelete.size() > 0){
+            students.removeAll(toDelete);
+            Util.updateFile(students);
+        } else {
+            System.err.println(Util.RED_BOLD+"Student "+ID+" does not exist"+Util.WHITE_BOLD);
+        }
     }
     
     private void removeStudent(){
@@ -121,7 +126,18 @@ public class AdminController {
     
     // Show students  ---- you can use show method from Database class ----   
     private void show(){
-        students.forEach(System.out::println);
+        System.out.println(Util.YELLOW_BOLD+"Student List"+Util.WHITE_BOLD);
+        if(students.size() > 0){
+            try {
+                new Database().show();
+            } catch (IOException ex) {
+                System.out.println("Unable to read data from students database");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.out.println("\t< Nothing to Display >");
+        }
     }
 
     // Menu --> Admin System (c/g/p/r/s/x):

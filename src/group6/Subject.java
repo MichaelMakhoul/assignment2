@@ -13,6 +13,7 @@ public class Subject implements Serializable{
     private int mark;
     private String grade;
 
+    // Constructor
     public Subject(int ID) {
         subjectID = ID;
         mark = Util.generatRand(25, 100);

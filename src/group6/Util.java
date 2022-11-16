@@ -69,3 +69,14 @@ public class Util {
     public static final String CYAN_BOLD = "\033[1;36m";   // CYAN
     public static final String WHITE_BOLD = "\033[0m";  // WHITE
 }
+
+
+// Regex on each new password 
+
+// length
+
+// Regex for email and password on login
+
+// Group by grade instead of avg-mark - Done
+// email unique - Done
+// Try group with empty subject list - Done

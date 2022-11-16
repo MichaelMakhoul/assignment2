@@ -24,6 +24,7 @@ import java.util.List;
  * @author 236351
  */
 public class Database {
+
     private String filename = "students.data";
     private Path filePath;
 
@@ -31,7 +32,7 @@ public class Database {
     public Database() {
         setup();
     }
-    
+
     // Checks if the file 'students.data exists' before creating it
     private void setup() {
         filePath = Paths.get(filename);
@@ -39,7 +40,7 @@ public class Database {
             try {
                 Files.createFile(filePath);
             } catch (IOException ex) {
-                System.out.println(Util.RED_BOLD+"Unable to create file "+filename+Util.WHITE_BOLD);
+                System.out.println(Util.RED_BOLD + "Unable to create file " + filename + Util.WHITE_BOLD);
             }
         }
     }
@@ -55,7 +56,7 @@ public class Database {
         objOut.close();
         fileOut.close();
     }
-    
+
     private List<Student> readStudents(Path path) throws FileNotFoundException, IOException, ClassNotFoundException {
         File file = path.toFile();
         FileInputStream fileIn = new FileInputStream(file);
@@ -68,32 +69,31 @@ public class Database {
 
         return temp;
     }
-    
-    public List<Student> readStudents(){
+
+    public List<Student> readStudents() {
         List<Student> temp = new ArrayList();
         try {
             temp.addAll(readStudents(filePath));
         } catch (EOFException ex) {
-                    
+            System.out.println("Students database is empty");
         } catch (IOException | ClassNotFoundException ex) {
-            System.out.println(Util.RED_BOLD+"Unable to read from file "+filename+Util.WHITE_BOLD);
-            System.out.println(ex);
+            System.out.println(Util.RED_BOLD + "Unable to read from file " + filename + Util.WHITE_BOLD);
         }
-        
+
         return temp;
     }
 
-    private void show() throws IOException, FileNotFoundException, ClassNotFoundException {
+    public void show() throws IOException, FileNotFoundException, ClassNotFoundException {
         List<Student> temp = readStudents(filePath);
         temp.forEach(System.out::println);
     }
 
     public void clear() throws FileNotFoundException, IOException {
         File f = filePath.toFile();
-        
+
         FileOutputStream fOut = new FileOutputStream(f);
         ObjectOutputStream objOut = new ObjectOutputStream(fOut);
-        
+
         objOut.writeObject(new ArrayList<Student>());
 
         objOut.close();

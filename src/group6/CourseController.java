@@ -44,7 +44,6 @@ public class CourseController {
     
     private void enrol(){
         if(student.checkMaxCapacity()){
-            System.out.println(student);
             student.enrolSubject();
             updateList(student);
         }else{

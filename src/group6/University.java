@@ -25,7 +25,7 @@ public class University {
     }
     
     public static char readChoice() {
-        System.out.print("University System: (A)dmin, (S)tudent, or X: ");
+        System.out.print("University System: (A)dmin, (S)tudent, or X:  ");
         return In.nextChar();
     }
     

@@ -2,7 +2,9 @@ package group6;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -39,7 +41,7 @@ public class Student implements Serializable {
     public String getPassword() {
         return password;
     }
-    
+
     // Mutators 
     // Changes student password    
     public void setPassword(String password) {
@@ -80,6 +82,11 @@ public class Student implements Serializable {
         return subjects.size() < MAX_SUBJECTS_NUMBER;
     }
 
+    // Check if the sutdent has enrolled to at least one subject 
+    public boolean hasEnrolled() {
+        return subjects.size() > 0;
+    }
+
     // Get number of enrolled subjects
     private int numberOfSubjects() {
         return subjects.size();
@@ -89,9 +96,11 @@ public class Student implements Serializable {
     public void enrolSubject(int ID) {
         Subject subject = new Subject(ID);
         subjects.add(subject);
-        System.out.println(Util.YELLOW_BOLD + subject.getName() + Util.WHITE_BOLD);
+        System.out.println(Util.YELLOW_BOLD + "Enrolling in " 
+                           + subject.getName() + Util.WHITE_BOLD);
+        
         System.out.println(Util.YELLOW_BOLD + "You are now enrolled in "
-                           +numberOfSubjects()+ " out of " +MAX_SUBJECTS_NUMBER
+                           + numberOfSubjects() + " out of " + MAX_SUBJECTS_NUMBER
                            + " subjects" + Util.WHITE_BOLD);
     }
 
@@ -102,9 +111,9 @@ public class Student implements Serializable {
     // Drops subjects
     public void dropSubject(int ID) {
         List<Subject> toDelete = new ArrayList();
-        
+
         toDelete.addAll(subjects(ID));
-        
+
         if (toDelete.size() > 0) {
             subjects.removeAll(toDelete);
             System.out.println(Util.YELLOW_BOLD + "Droping Subject-" + ID + Util.WHITE_BOLD);
@@ -119,6 +128,14 @@ public class Student implements Serializable {
     public double averageMark() {
         return subjects.stream().mapToInt(s -> s.getMark()).average().getAsDouble();
     }
+    
+    public String getGrade() {
+        double mark = averageMark();
+        return  mark >= 85 ? "HD":
+                mark >= 75 ? "D" :
+                mark >= 65 ? "C" :
+                mark >= 50 ? "P" : "Z";
+    }
 
     // Checks if the student fail or pass based on the average mark
     public boolean passed() {
@@ -131,19 +148,25 @@ public class Student implements Serializable {
     }
 
     public void showSubjects() {
-        System.out.println(Util.YELLOW_BOLD+"Showing "+numberOfSubjects()+" subjects"+Util.WHITE_BOLD);
+        System.out.println(Util.YELLOW_BOLD + "Showing " + numberOfSubjects() + " subjects" + Util.WHITE_BOLD);
         subjects.forEach(System.out::println);
     }
 
-//    // Search for student by email
-//    public boolean matchEmail(String email){
-//        return this.email.equals(email);
-//    }
+    // Search for student by email
+    public boolean matchEmail(String email){
+        return this.email.equals(email);
+    }
 //    
 //    // Search for student by password
 //    public boolean matchPassword(String password){
 //        return this.password.equals(password);
 //    }
+    
+    // Returns the name, ID, grade and average mark for each student as a string
+    public String getStudentsDetails(){
+        return String.format("%-20s :: %06d --> GRADE: %2s - MARK: %.2f", name, studentID, getGrade() ,averageMark());
+    }
+    
     
     @Override
     public String toString() {
