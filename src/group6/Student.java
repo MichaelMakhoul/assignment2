@@ -34,6 +34,10 @@ public class Student implements Serializable {
         return studentID;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -163,13 +167,17 @@ public class Student implements Serializable {
 //    }
     
     // Returns the name, ID, grade and average mark for each student as a string
-    public String getStudentsDetails(){
-        return String.format("%-20s :: %06d --> GRADE: %2s - MARK: %.2f", name, studentID, getGrade() ,averageMark());
+    public String printGrouping(int format){
+        return String.format("%-"+format+"s :: %06d --> GRADE: %2s - MARK: %.2f", name, studentID, getGrade() ,averageMark());
     }
     
+    public String printPartitioning(int format) {
+        return String.format("%-"+format+"s :: %06d --> Email: %s", name, studentID, email);
+    }
     
     @Override
     public String toString() {
-        return String.format("%-20s :: %06d --> Email: %s", name, studentID, email);
+        int format = Util.maxNameLength();
+        return String.format("%-"+format+"s :: %06d --> Email: %s", name, studentID, email);
     }
 }

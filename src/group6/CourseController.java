@@ -20,7 +20,11 @@ public class CourseController {
     public CourseController(int ID) {
         initList();
         this.student = setSession(ID);
-        menu();
+        try {
+            menu();   
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+        }
     }
     
     // Initialize students list with data from students.data file
@@ -35,7 +39,6 @@ public class CourseController {
     
     // Updates students.data file after modifying the list
     private void updateList(Student s){
-        
         int position = students.indexOf(s);
         students.set(position, student);
         
@@ -52,22 +55,81 @@ public class CourseController {
         
     }
     
-    private void change(){
-        String newPassword = Util.readString("New Password: ");
+    // Checks if the email and password matches the correct format
+    private String checkPasswordFormate(String password){
+//        if(!accepted){
+//            System.out.println(Util.RED_BOLD+"\tIncorrect password format"+Util.WHITE_BOLD);
+//        }
+//        
+//        return accepted;
+            
+//        String password = Util.readString("New Password: ");
+        
+//        boolean accepted = Util.passwordRegex(password);
+        
+        while(!Util.passwordRegex(password)){
+            System.out.println(Util.RED_BOLD+"\tIncorrect password format"+Util.WHITE_BOLD);
+            password = Util.readString("New Password: ");
+        }
+
+        return password;
+    }
+    
+    private boolean passwordMatch(String password, String confirm){
+        
+        password = Util.readString("New password: ");
+        
+        boolean matches = password.equals(confirm);
+        
+        while(!matches){
+            System.out.println(Util.RED_BOLD+"\tPassword does not match - try again"+Util.WHITE_BOLD);
+            password = Util.readString("New password: ");
+        }
+        
+        return matches;
+    }
+    
+    private void confirmPassword(String newPassword){
         String confirmPassword;
         
+        while(!passwordMatch(newPassword, confirmPassword = Util.readString("Confirm Password: ")));
+        
+        student.setPassword(newPassword);
+        updateList(student);
+    }
+    
+    private void change(){
+        String newPassword = "";
+        
+//        // Check regex
+//        while(!Util.passwordRegex(newPassword = Util.readString("New Password: "))){
+//            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
+//        }
+        
+        
+
         // Passwords match
-        while(!(confirmPassword = Util.readString("Confirm password: ")).equals(newPassword)){
-            System.out.println(Util.RED_BOLD+"Password does not match - try again"+Util.WHITE_BOLD);
-        }
+//        while(!checkPasswordFormate(newPassword = Util.readString("New Password: ")));
+        
+        confirmPassword(newPassword);
+      
+        
+        
+//            if(!passwordMatch(newPassword, confirmPassword)){
+//                confirmPassword = Util.readString("Confirm Password: ");
+//            }
+        
+        
+//        student.setPassword(newPassword);
+//        updateList(student);
         
         // Check regex 
-        if(Util.passwordRegex(newPassword) && Util.passwordRegex(confirmPassword)){
-            student.setPassword(newPassword);
-            updateList(student);
-        }else{
-            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
-        }
+//        if(Util.passwordRegex(newPassword) && Util.passwordRegex(confirmPassword)){
+//            student.setPassword(newPassword);
+//            updateList(student);
+//        }else{
+//            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
+//        }
     }
     
     private void remove(){

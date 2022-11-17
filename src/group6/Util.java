@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  * @author 236351
  */
 public class Util {
+    static final String emailRegex = ".*\\..*@university.com";
+    static final String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
 
     // Read integer value
     public static int readNumber(String prompt) {
@@ -41,15 +43,22 @@ public class Util {
     }
     
     public static boolean emailRegex(String email){
-        String emailRegex = ".*\\..*@university.com";
         return Util.checkRegex(email, emailRegex);
     }
     
     public static boolean passwordRegex(String password){
-        String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
         return checkRegex(password, passwordRegex);
     }
     
+    public static int maxNameLength(List<Student> students){
+        return students.stream().filter(Student::hasEnrolled).mapToInt(s -> s.getName().length()).max().getAsInt();
+    }
+    
+    public static int maxNameLength(){
+        List<Student> students = new Database().readStudents();
+        return students.stream().mapToInt(s -> s.getName().length()).max().getAsInt();
+    }
+
     // Updates students.data file after modifying the list
     public static void updateFile(List<Student> list){
             Database db = new Database();
@@ -73,9 +82,9 @@ public class Util {
 
 // Regex on each new password 
 
-// length
+// length - Done
 
-// Regex for email and password on login
+// Regex for email and password on login - Done
 
 // Group by grade instead of avg-mark - Done
 // email unique - Done

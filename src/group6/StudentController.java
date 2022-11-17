@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author 236351
+ * @author group6
  */
 public class StudentController {
     private List<Student> students = new ArrayList();
@@ -18,7 +18,11 @@ public class StudentController {
     // Constructor
     public StudentController() {
         initList();
-        menu();
+        try {
+            menu();   
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+        }
     }
     
     // Initialize students list with data from students.data file
@@ -30,10 +34,22 @@ public class StudentController {
     // Check if the student exists 
     private Student existingStudent(String email, String password){
         return students.stream().
-        filter(p -> (p.getEmail().equals(email) && p.getPassword().equals(password))).
+        filter(p -> (p.matchEmail(email) && p.getPassword().equals(password))).
         findAny().orElse(null);
     }
     
+    // look up function to search students list by email
+    private boolean emailExists(String email) {
+        boolean found = students.stream().anyMatch(p -> p.matchEmail(email));
+        
+        if (found){
+            System.out.println(Util.RED_BOLD+"\t"+"Email already exists"+Util.WHITE_BOLD);
+        }
+        
+        return found;
+    }
+    
+    // Checks if the email and password matches the correct format
     private boolean checkFormate(String email, String password){
         if(Util.emailRegex(email) && Util.passwordRegex(password)){
             System.out.println(Util.YELLOW_BOLD+"\temail and password format acceptable"+Util.WHITE_BOLD);
@@ -44,7 +60,7 @@ public class StudentController {
         }
     }
     
-    private Student login(String email, String password){
+    private Student login(String email, String password){        
         Student student = existingStudent(email, password);
         
         if(student != null){
@@ -85,40 +101,32 @@ public class StudentController {
         return ID;
     }
     
-    // look up function to search students list by email
-    private Student emailExists(String email) {
-        return students.stream().filter(p -> p.matchEmail(email)).findAny().orElse(null);
-    }
-    
     private void register(String email, String password){
         String name = Util.readString("Name: ");
         students.add(new Student(uniqueStudentID(), name, email, password));
     }
     
-//    private void register(){
-//        String email;
-//        String password;
-//        System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
-//       
-//        while(emailExists(email = Util.readString("Email: ")) !=null){
-//          System.out.println(Util.RED_BOLD+"\t"+"Email already exists"+Util.WHITE_BOLD);  
-//        
-//        }
-//         while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
-//        register(email, password);
-//        Util.updateFile(students);
-//    }
-    
     private void register(){
         String email;
         String password;
-        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
-//        while(emailExists() != null){
-//            email = Util.readString("Email: ");
-//        }
+        System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
+        
+        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")) || emailExists(email));
+        
         register(email, password);
         Util.updateFile(students);
     }
+    
+//    private void register(){
+//        String email;
+//        String password;
+//        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+////        while(emailExists() != null){
+////            email = Util.readString("Email: ");
+////        }
+//        register(email, password);
+//        Util.updateFile(students);
+//    }
     
     public char readChoice() {
         System.out.print("\tChoice(l/r/x): ");

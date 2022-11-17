@@ -13,7 +13,11 @@ public class University {
     
     public static void main(String[] args){
         University u = new University();
-        u.menu();
+        try {
+            u.menu();   
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+        }
     }
     
     private void adminSystem(){
@@ -30,7 +34,7 @@ public class University {
     }
     
     // Menu --> University System: (A)dmin, (S)tudent, or X: 
-    private void menu() {
+    private void menu() throws StringIndexOutOfBoundsException{
         char c;
         while ((c = readChoice()) != 'X') {
             switch (c) {

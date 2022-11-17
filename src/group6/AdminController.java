@@ -23,20 +23,36 @@ public class AdminController {
     
     public AdminController() {
         initList();
-        menu();
+        try {
+            menu();   
+        } catch (StringIndexOutOfBoundsException e) {
+            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+        }
     }
     
-   // Initialize students list with data from students.data file
+    /**
+     * Initialize students list with data from students.data file
+     */
+    
     public void initList() {
         Database db = new Database();
         students.addAll(db.readStudents());
     }
     
     // Returns a list of name, ID, grade and average mark for each student. used when grouping students by grade.
-    private List<String> detailsList(List<Student> list){
+    private List<String> printGroupList(List<Student> list){
         List<String> temp = new ArrayList();
         for (Student student : list) {
-            temp.add(student.getStudentsDetails());
+            temp.add(student.printGrouping(Util.maxNameLength(students)));
+        }
+        
+        return temp;
+    }
+    
+    private List<String> printPartitionList(List<Student> list){
+        List<String> temp = new ArrayList();
+        for (Student student : list) {
+            temp.add(student.printPartitioning(Util.maxNameLength(students)));
         }
         
         return temp;
@@ -54,7 +70,7 @@ public class AdminController {
         
         if(map.size() > 0){
             map.forEach((g, v) -> {
-                System.out.println(g + " --> " + detailsList(v));
+                System.out.println(g + " --> " + printGroupList(v));
             });
         } else {
             System.out.println("\t< Nothing to Display >");
@@ -70,7 +86,7 @@ public class AdminController {
         System.out.println(Util.YELLOW_BOLD+"PASS/FAIL Partition"+Util.WHITE_BOLD);
         
         partition(students).forEach((k, v) -> {
-            System.out.println((k ? "PASS" : "FAIL") + " --> "+ v);
+            System.out.println((k ? "PASS" : "FAIL") + " --> "+ printPartitionList(v));
         });
     }
     
