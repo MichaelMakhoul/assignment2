@@ -1,52 +1,68 @@
 package group6;
-
 import java.io.Serializable;
 
 /**
- *
- * @author 236351
- */
+* The Subject Class contains data of the subject including ID, mark and grade.
+* 
+* @author Group-6
+*/
 public class Subject implements Serializable{
 
-    // Subject Fields
+    /**
+     * Subject Fields.
+     */
     private int subjectID;
     private int mark;
     private String grade;
 
-    // Constructor
+    /**
+     * Subject Class Constructor.
+     */
     public Subject(int ID) {
         subjectID = ID;
         mark = Util.generatRand(25, 100);
-        grade = grade();
+        grade = Util.grade(mark);
     }
 
     // Accessors
+    
+    /**
+     * Gives access to subjectID
+     * @return subjectID
+     */
     public int getSubjectID() {
         return subjectID;
     }
 
+    /**
+     * Gives access to mark
+     * @return mark
+     */
     public int getMark() {
         return mark;
     }
     
-    // Returns subject's name
+    /**
+     * Returns subject name
+     * @return subject's name
+     */
     public String getName(){
         return "Subject-"+subjectID;
     }
 
-    // Search for subject by ID
+    /**
+     * Search for subject by ID
+     * @param ID - Subject ID
+     * @return true or false
+     */
     public boolean match(int ID){
         return this.subjectID == ID;
     }
     
-    // Determins the grade based on mark
-    private String grade(){
-        return  mark >= 85 ? "HD":
-                mark >= 75 ? "D" :
-                mark >= 65 ? "C" :
-                mark >= 50 ? "P" : "Z";
-    }
-    
+    /**
+     * Overrides the toString function.
+     * @return String format.
+     */
     @Override
     public String toString() {
         return String.format("[ Subject::%03d -- mark = %-3d-- grade = %4s ]", subjectID, mark, grade);

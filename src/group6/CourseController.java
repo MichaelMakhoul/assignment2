@@ -1,152 +1,161 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package group6;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author 236351
- */
+* The StudentController Class, Helps Students to manage their accounts and review their marks.
+* 
+* @author Group-6
+*/
+
 public class CourseController {
+    
+    /**
+     * An instance of Student Class - used to manage a students data in students list.
+     */
     Student student;
+    
+    /**
+     * List of students, an instance of Student Class - used to hold
+     * students data from the database.
+     */
     private List<Student> students = new ArrayList();
     
-    // Constructor 
+    /**
+     * CourseController Class Constructor.
+     * @param ID - Students ID
+     */
     public CourseController(int ID) {
         initList();
         this.student = setSession(ID);
         try {
             menu();   
         } catch (StringIndexOutOfBoundsException e) {
-            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+            System.out.println(Util.RED_BOLD+"\t\tUnknown command"+Util.WHITE_BOLD);
         }
     }
     
-    // Initialize students list with data from students.data file
+    /**
+    * Initialize students list with data from students database.
+    */
     public void initList(){
         Database db = new Database();
-        students.addAll(db.readStudents());
+        students = db.readStudents();
     }
     
+    /**
+     * Starts a user session after they login using their StudentID
+     * @param ID - Student ID
+     * @return Student
+     */
     private Student setSession(int ID){
         return students.stream().filter(s -> s.getStudentID() == ID).findAny().orElse(null);
     }
     
-    // Updates students.data file after modifying the list
+    /**
+     * Updates students.data file after modifying the list.
+     * @param s - The signed in Student
+     */
     private void updateList(Student s){
         int position = students.indexOf(s);
         students.set(position, student);
-        
         Util.updateFile(students);
     }
     
+    /**
+     * Adds a new subject to the students database using enrolSubject function from Student Class.
+     */
     private void enrol(){
         if(student.checkMaxCapacity()){
             student.enrolSubject();
             updateList(student);
         }else{
-            System.out.println(Util.RED_BOLD+"Students are allowed to enrol in 4 subjects only"+Util.WHITE_BOLD);
+            System.out.println(Util.RED_BOLD+"\t\tStudents are allowed to enrol in 4 subjects only"+Util.WHITE_BOLD);
         }
-        
     }
     
-    // Checks if the email and password matches the correct format
-    private String checkPasswordFormate(String password){
-//        if(!accepted){
-//            System.out.println(Util.RED_BOLD+"\tIncorrect password format"+Util.WHITE_BOLD);
-//        }
-//        
-//        return accepted;
-            
-//        String password = Util.readString("New Password: ");
-        
-//        boolean accepted = Util.passwordRegex(password);
-        
+    /**
+     * Checks if the email and password matches the correct format.
+     * @param password - Users password
+     * @return password with correct format
+     */
+    private String checkPasswordFormate(String password){        
         while(!Util.passwordRegex(password)){
-            System.out.println(Util.RED_BOLD+"\tIncorrect password format"+Util.WHITE_BOLD);
-            password = Util.readString("New Password: ");
+            System.out.println(Util.RED_BOLD+"\t\tIncorrect password format"+Util.WHITE_BOLD);
+            password = Util.readString("\t\tNew Password: ");
         }
 
         return password;
     }
     
-    private boolean passwordMatch(String password, String confirm){
-        
-        password = Util.readString("New password: ");
-        
+    /**
+     * Checks if the new password matches confirm password - used when users update their password.
+     * @param password - new password
+     * @param confirm - confirm password
+     * @return true or false
+     */
+    private boolean passwordMatch(String password, String confirm){        
         boolean matches = password.equals(confirm);
         
-        while(!matches){
-            System.out.println(Util.RED_BOLD+"\tPassword does not match - try again"+Util.WHITE_BOLD);
-            password = Util.readString("New password: ");
+        while(!password.equals(confirm)){
+            System.out.println(Util.RED_BOLD+"\t\tPassword does not match - try again"+Util.WHITE_BOLD);
+            confirm = Util.readString("\t\tConfirm Password: ");
         }
         
         return matches;
     }
     
+    /**
+     * Reads in confirm password and updates students password in the database, 
+     * after checking if it matches the new entered password.
+     * @param newPassword - new password
+     */
     private void confirmPassword(String newPassword){
         String confirmPassword;
         
-        while(!passwordMatch(newPassword, confirmPassword = Util.readString("Confirm Password: ")));
-        
-        student.setPassword(newPassword);
-        updateList(student);
+        if(passwordMatch(newPassword, confirmPassword = Util.readString("\t\tConfirm Password: "))){
+            student.setPassword(newPassword);
+            updateList(student);
+        }
     }
     
+    /**
+     * Reads in new password and uses checkPasswordFormate and confirmPassword functions.
+     */
     private void change(){
-        String newPassword = "";
-        
-//        // Check regex
-//        while(!Util.passwordRegex(newPassword = Util.readString("New Password: "))){
-//            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
-//        }
-        
-        
-
-        // Passwords match
-//        while(!checkPasswordFormate(newPassword = Util.readString("New Password: ")));
-        
+        String newPassword = checkPasswordFormate(Util.readString("\t\tNew Password: "));
         confirmPassword(newPassword);
-      
-        
-        
-//            if(!passwordMatch(newPassword, confirmPassword)){
-//                confirmPassword = Util.readString("Confirm Password: ");
-//            }
-        
-        
-//        student.setPassword(newPassword);
-//        updateList(student);
-        
-        // Check regex 
-//        if(Util.passwordRegex(newPassword) && Util.passwordRegex(confirmPassword)){
-//            student.setPassword(newPassword);
-//            updateList(student);
-//        }else{
-//            System.out.println(Util.RED_BOLD+"Incorrect password format"+Util.WHITE_BOLD);
-//        }
     }
     
+    /**
+     * Removes a subject by ID.
+     */
     private void remove(){
-        int ID = Util.readNumber("Remove Subject by ID: ");
+        int ID = Util.readNumber("\t\tRemove Subject by ID: ");
         student.dropSubject(ID);
         updateList(student);
     }
     
+    /**
+     * Prints out the list of subjects that the student enrolled in. 
+     */
     private void show(){
         student.showSubjects();
     }
     
+    /**
+     * Displays the different options to help user to choose from the menu.
+     * @return users choice.
+     */
     public char readChoice() {
-        System.out.print("\t\tChoice(c/e/r/s/x): ");
+        System.out.print(Util.CYAN_BOLD +"\t\tStudent Course Menu(c/e/r/s/x): "+Util.WHITE_BOLD);
         return In.nextChar();
     }
     
+    /**
+     * Student Course System Menu - Enables students to manage their account. 
+     */
     private void menu() {
         char c;
         while ((c = readChoice()) != 'x') {
@@ -170,11 +179,14 @@ public class CourseController {
         }
     }
 
+    /**
+     * Displays the available options for the user to choose from.
+     */
     private void help() {
-        System.out.println("c - change");
-        System.out.println("e - enrol");
-        System.out.println("r - remove");
-        System.out.println("s - show");
-        System.out.println("x - exit");
+        System.out.println("\t\tc - change");
+        System.out.println("\t\te - enrol");
+        System.out.println("\t\tr - remove");
+        System.out.println("\t\ts - show");
+        System.out.println("\t\tx - exit");
     }
 }

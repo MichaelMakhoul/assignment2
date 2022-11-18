@@ -1,16 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package group6;
 
 /**
- *
- * @author 236351
+ * This interface helps administrators to manage students enrollments
+ * and shows various types of reports about students marks and grades
+ * As well as, helping students to manage their accounts and review their marks.
+ * 
+ * The University System enables access to the Student system menu and to 
+ * the Admin system menu.
+ * 
+ * @author Group-6
  */
 public class University {
     
+    /**
+     * University Class main method.
+     */
     public static void main(String[] args){
         University u = new University();
         try {
@@ -20,20 +24,34 @@ public class University {
         }
     }
     
+    /**
+     * Enables access to Admin System.
+     */
     private void adminSystem(){
         new AdminController();
     }
     
+    /**
+     * Enables access to Students System.
+     */
     private void studentSystem(){
         new StudentController();
     }
     
+    /**
+     * Displays the different options to help user to choose from the menu.
+     * @return users choice.
+     */
     public static char readChoice() {
-        System.out.print("University System: (A)dmin, (S)tudent, or X:  ");
+        System.out.print(Util.CYAN_BOLD+"University System: (A)dmin, (S)tudent, or X:  "+Util.WHITE_BOLD);
         return In.nextChar();
     }
     
-    // Menu --> University System: (A)dmin, (S)tudent, or X: 
+    /**
+     * University System Menu - Enables users to choose the required system.
+     * 
+     * @throws StringIndexOutOfBoundsException 
+     */
     private void menu() throws StringIndexOutOfBoundsException{
         char c;
         while ((c = readChoice()) != 'X') {
@@ -53,6 +71,9 @@ public class University {
         System.out.println(Util.YELLOW_BOLD+"Thank You"+Util.WHITE_BOLD);
     }
 
+    /**
+     * Displays the available options for the user to choose from.
+     */
     private void help() {
         System.out.println("A - admin");
         System.out.println("S - student");

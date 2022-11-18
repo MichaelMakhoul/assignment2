@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package group6;
 
 import java.io.EOFException;
@@ -20,20 +15,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author 236351
- */
+* The Database Class connects the system to students database -
+* the class reads and save data from students.data file.
+* 
+* @author Group-6
+*/
 public class Database {
 
     private String filename = "students.data";
     private Path filePath;
 
-    // Constructor 
+    /**
+     * Database Class Constructor.
+     */ 
     public Database() {
         setup();
     }
-
-    // Checks if the file 'students.data exists' before creating it
+    
+    /**
+     * Checks if the file 'students.data exists before creating it
+     */
     private void setup() {
         filePath = Paths.get(filename);
         if (!Files.exists(filePath)) {
@@ -45,7 +46,12 @@ public class Database {
         }
     }
 
-    //saving objects to a file
+    /**
+     * Saves objects to a file.
+     * @param list - a list of student objects
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public void save(List<Student> list) throws FileNotFoundException, IOException {
         File file = filePath.toFile();
         FileOutputStream fileOut = new FileOutputStream(file);
@@ -57,6 +63,14 @@ public class Database {
         fileOut.close();
     }
 
+    /**
+     * Reads objects from a file.
+     * @param path - students.data file location.
+     * @return list of student objects
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
     private List<Student> readStudents(Path path) throws FileNotFoundException, IOException, ClassNotFoundException {
         File file = path.toFile();
         FileInputStream fileIn = new FileInputStream(file);
@@ -70,6 +84,10 @@ public class Database {
         return temp;
     }
 
+    /**
+     * Uses readStudents function to read data from the students file.
+     * @return list of student objects
+     */
     public List<Student> readStudents() {
         List<Student> temp = new ArrayList();
         try {
@@ -83,11 +101,22 @@ public class Database {
         return temp;
     }
 
+    /**
+     * Displays list of students from the students.data file.
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws ClassNotFoundException 
+     */
     public void show() throws IOException, FileNotFoundException, ClassNotFoundException {
         List<Student> temp = readStudents(filePath);
-        temp.forEach(System.out::println);
+        temp.forEach(s -> System.out.println("\t"+s));
     }
 
+    /**
+     * Empties the students.data file by overriding the file content with new empty arrayList.
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public void clear() throws FileNotFoundException, IOException {
         File f = filePath.toFile();
 

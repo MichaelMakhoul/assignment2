@@ -1,44 +1,57 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package group6;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author group6
- */
+* The StudentController Class, Allows Students to login to their accounts or register new account.
+* 
+* @author Group-6
+*/
 public class StudentController {
+    /**
+     * List of students, an instance of Student Class - used to hold
+     * students data from the database.
+     */
     private List<Student> students = new ArrayList();
 
-    // Constructor
+    /**
+     * StudentController Class Constructor.
+     */
     public StudentController() {
         initList();
         try {
             menu();   
         } catch (StringIndexOutOfBoundsException e) {
-            System.out.println(Util.RED_BOLD+"Unknown command"+Util.WHITE_BOLD);
+            System.out.println(Util.RED_BOLD+"\tUnknown command"+Util.WHITE_BOLD);
         }
     }
     
-    // Initialize students list with data from students.data file
+    /**
+     * Initialize students list with data from students database.
+     */
     public void initList(){
         Database db = new Database();
-        students.addAll(db.readStudents());
+        students = db.readStudents();
     }
     
-    // Check if the student exists 
+    /**
+     * Checks if the student exists in the database.
+     * @param email - students email
+     * @param password - students password
+     * @return A Student or null.
+     */
     private Student existingStudent(String email, String password){
         return students.stream().
         filter(p -> (p.matchEmail(email) && p.getPassword().equals(password))).
         findAny().orElse(null);
     }
     
-    // look up function to search students list by email
+    /**
+     * A look up function to search students list by email.
+     * @param email - students email
+     * @return true or false.
+     */
     private boolean emailExists(String email) {
         boolean found = students.stream().anyMatch(p -> p.matchEmail(email));
         
@@ -49,10 +62,15 @@ public class StudentController {
         return found;
     }
     
-    // Checks if the email and password matches the correct format
-    private boolean checkFormate(String email, String password){
+    /**
+     * Checks if the email and password matches the correct format.
+     * @param email - students email
+     * @param password - students password
+     * @return true or false.
+     */
+    private boolean checkFormat(String email, String password){
         if(Util.emailRegex(email) && Util.passwordRegex(password)){
-            System.out.println(Util.YELLOW_BOLD+"\temail and password format acceptable"+Util.WHITE_BOLD);
+            System.out.println(Util.YELLOW_BOLD+"\temail and password formats acceptable"+Util.WHITE_BOLD);
             return true;
         } else {
             System.err.println(Util.RED_BOLD+"\tIncorrect email or password format"+Util.WHITE_BOLD); 
@@ -60,7 +78,16 @@ public class StudentController {
         }
     }
     
-    private Student login(String email, String password){        
+    /**
+     * Uses existingStudent function to check users credentials if they exist
+     * and allows access to Course menu.
+     * 
+     * @param email - students email
+     * @param password - students password
+     * @return Student or null
+     */
+    private Student login(String email, String password){      
+        initList();
         Student student = existingStudent(email, password);
         
         if(student != null){
@@ -72,11 +99,16 @@ public class StudentController {
         return null;
     }
     
+    /**
+     * Reads users email and password from STDIN and uses login function to authorize 
+     * access to their account.
+     */
     private void login(){
         String email;
         String password;
         
-        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
+        System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign In"+Util.WHITE_BOLD);
+        while(!checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")));
         
         Student student = login(email, password);
         
@@ -84,13 +116,20 @@ public class StudentController {
             new CourseController(student.getStudentID());
         }
     }
-
-    // look up function to search students list by ID
+    
+    /**
+     * A look up function to search students list by ID.
+     * @param ID - Students ID
+     * @return Student or null
+     */
     private Student student(int ID) {
         return students.stream().filter(p -> p.matchID(ID)).findAny().orElse(null);
     }
     
-    // Generates unique subjectID
+    /**
+     * Generates unique subjectID.
+     * @return unique ID.
+     */
     private int uniqueStudentID() {
         int ID = Util.generatRand(1, 999999);
 
@@ -101,38 +140,44 @@ public class StudentController {
         return ID;
     }
     
+    /**
+     * Adds new student to the students database.
+     * @param email - students email
+     * @param password - students password
+     */
     private void register(String email, String password){
-        String name = Util.readString("Name: ");
+        String name = Util.readString("\tName: ");
         students.add(new Student(uniqueStudentID(), name, email, password));
+        System.out.println(Util.YELLOW_BOLD+"\t"+"Enrolling Student "+name+Util.WHITE_BOLD);
     }
     
+    /**
+     * Reads email and password from STDIN, checks for input format and uses register 
+     * function to register a new student.
+     */
     private void register(){
         String email;
         String password;
         System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
         
-        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")) || emailExists(email));
+        while(!checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")) || emailExists(email));
         
         register(email, password);
         Util.updateFile(students);
     }
     
-//    private void register(){
-//        String email;
-//        String password;
-//        while(!checkFormate(email = Util.readString("Email: "), password = Util.readString("Password: ")));
-////        while(emailExists() != null){
-////            email = Util.readString("Email: ");
-////        }
-//        register(email, password);
-//        Util.updateFile(students);
-//    }
-    
+    /**
+     * Displays the different options to help user to choose from the menu.
+     * @return users choice.
+     */
     public char readChoice() {
-        System.out.print("\tChoice(l/r/x): ");
+        System.out.print(Util.CYAN_BOLD +"\t"+ "Student System (l/r/x): "+Util.WHITE_BOLD);
         return In.nextChar();
     }
     
+    /**
+     * Students System Menu - Enables students to login or register. 
+     */
     private void menu() {
         char c;
         while ((c = readChoice()) != 'x') {
@@ -150,6 +195,9 @@ public class StudentController {
         }
     }
 
+    /**
+     * Displays the available options for the user to choose from.
+     */
     private void help() {
         System.out.println("\tl - login");
         System.out.println("\tr - register");
