@@ -149,8 +149,8 @@ public class AdminController {
         String choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
                       +Util.WHITE_BOLD);
         
-        while(choice.charAt(0) != 'N' || choice.isEmpty()){
-            if(choice.charAt(0) == 'Y'){
+        while(choice.length() == 0 || choice.charAt(0) != 'N'){
+            if(choice.length() != 0 && choice.charAt(0) == 'Y'){
                 try {
                     new Database().clear();
                     System.out.println(Util.YELLOW_BOLD+"\tStudents data cleared"+Util.WHITE_BOLD);
