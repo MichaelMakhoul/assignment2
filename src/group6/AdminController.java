@@ -150,17 +150,27 @@ public class AdminController {
     private void clear(){
         System.out.println(Util.YELLOW_BOLD+"\tClearing students database"+Util.WHITE_BOLD);
         
-        char choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
-                      +Util.WHITE_BOLD).charAt(0);
-        if(choice == 'Y'){
-            try {
-                new Database().clear();
-                System.out.println(Util.YELLOW_BOLD+"\tStudents data cleared"+Util.WHITE_BOLD);
-                students.clear();
-            } catch (IOException ex) {
-                System.out.println(Util.RED_BOLD+"\tUnable to clear students database"+Util.WHITE_BOLD);
+        String choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
+                      +Util.WHITE_BOLD);
+        
+        while(choice.charAt(0) != 'N' || choice.isEmpty()){
+            if(choice.charAt(0) == 'Y'){
+                try {
+                    new Database().clear();
+                    System.out.println(Util.YELLOW_BOLD+"\tStudents data cleared"+Util.WHITE_BOLD);
+                    students.clear();
+                    break;
+                } catch (IOException ex) {
+                    System.out.println(Util.RED_BOLD+"\tUnable to clear students database"+Util.WHITE_BOLD);
+                }
             }
+            
+            System.out.println(Util.RED_BOLD+"\tInvalid input "+Util.WHITE_BOLD);
+            choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
+                      +Util.WHITE_BOLD);
         }
+        
+        
     }
     
     /**
@@ -180,22 +190,13 @@ public class AdminController {
             System.out.println("\t\t< Nothing to Display >");
         }
     }
-
-    /**
-     * Displays the different options to help user to choose from the menu.
-     * @return users choice.
-     */
-    private char readChoice() {
-        System.out.print(Util.CYAN_BOLD +"\t"+"Admin System (c/g/p/r/s/x): "+Util.WHITE_BOLD);
-        return In.nextChar();
-    }
     
     /**
      * Admin System Menu - Enables users to choose the required action.
      */
     private void menu() {
         char c;
-        while ((c = readChoice()) != 'x') {
+        while ((c = Util.readChoice("\t"+"Admin System (c/g/p/r/s/x): ")) != 'x') {
             switch (c) {
                case 'c':
                     clear();

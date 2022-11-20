@@ -167,20 +167,11 @@ public class StudentController {
     }
     
     /**
-     * Displays the different options to help user to choose from the menu.
-     * @return users choice.
-     */
-    public char readChoice() {
-        System.out.print(Util.CYAN_BOLD +"\t"+ "Student System (l/r/x): "+Util.WHITE_BOLD);
-        return In.nextChar();
-    }
-    
-    /**
      * Students System Menu - Enables students to login or register. 
      */
     private void menu() {
         char c;
-        while ((c = readChoice()) != 'x') {
+        while ((c = Util.readChoice("\t"+ "Student System (l/r/x): ")) != 'x') {
             switch (c) {
                 case 'l':
                     login();

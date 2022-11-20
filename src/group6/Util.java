@@ -41,7 +41,6 @@ public class Util {
         String number;
 
         while (!(number = In.nextLine()).chars().allMatch(Character::isDigit) || number.isEmpty()) {
-
             int tabs = prompt.lastIndexOf('\t');
             String indent = prompt.substring(0, tabs + 1);
 
@@ -76,6 +75,7 @@ public class Util {
     /**
      * Determines the grade based on the mark
      *
+     * @param mark - The mark to calculate the grade based on
      * @return grade
      */
     public static String grade(double mark) {
@@ -153,5 +153,24 @@ public class Util {
         } catch (IOException ex) {
             System.out.println(RED_BOLD + "Unable to save data to students.data file" + WHITE_BOLD);
         }
+    }
+    
+    /**
+     * Displays the different options to help user to choose from the menu.
+     * @param prompt - String to show available commands
+     * @return users choice.
+     */
+    public static char readChoice(String prompt) {
+        System.out.print(CYAN_BOLD+prompt+WHITE_BOLD);
+        String choice;
+        
+        while(((choice = In.nextLine()).isEmpty())){
+            int tabs = prompt.lastIndexOf('\t');
+            String indent = prompt.substring(0, tabs + 1);
+
+            System.out.printf(RED_BOLD + indent + "%s %n" + CYAN_BOLD + "%s", "Invalid input", prompt);
+        }
+        
+        return choice.charAt(0);
     }
 }

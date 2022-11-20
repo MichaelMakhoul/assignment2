@@ -145,20 +145,11 @@ public class CourseController {
     }
     
     /**
-     * Displays the different options to help user to choose from the menu.
-     * @return users choice.
-     */
-    public char readChoice() {
-        System.out.print(Util.CYAN_BOLD +"\t\tStudent Course Menu(c/e/r/s/x): "+Util.WHITE_BOLD);
-        return In.nextChar();
-    }
-    
-    /**
      * Student Course System Menu - Enables students to manage their account. 
      */
     private void menu() {
         char c;
-        while ((c = readChoice()) != 'x') {
+        while ((c = Util.readChoice("\t\tStudent Course Menu(c/e/r/s/x): ")) != 'x') {
             switch (c) {
                 case 'c':
                     change();

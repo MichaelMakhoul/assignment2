@@ -39,22 +39,13 @@ public class University {
     }
     
     /**
-     * Displays the different options to help user to choose from the menu.
-     * @return users choice.
-     */
-    public static char readChoice() {
-        System.out.print(Util.CYAN_BOLD+"University System: (A)dmin, (S)tudent, or X:  "+Util.WHITE_BOLD);
-        return In.nextChar();
-    }
-    
-    /**
      * University System Menu - Enables users to choose the required system.
      * 
      * @throws StringIndexOutOfBoundsException 
      */
     private void menu() throws StringIndexOutOfBoundsException{
         char c;
-        while ((c = readChoice()) != 'X') {
+        while ((c = Util.readChoice("University System: (A)dmin, (S)tudent, or X: ")) != 'X') {
             switch (c) {
                 case 'A':
                     adminSystem();
