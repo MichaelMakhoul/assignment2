@@ -146,7 +146,7 @@ public class AdminController {
     private void clear(){
         System.out.println(Util.YELLOW_BOLD+"\tClearing students database"+Util.WHITE_BOLD);
         
-        String choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
+        String choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O:"
                       +Util.WHITE_BOLD);
         
         while(choice.length() == 0 || choice.charAt(0) != 'N'){
@@ -162,7 +162,7 @@ public class AdminController {
             }
             
             System.out.println(Util.RED_BOLD+"\tInvalid input "+Util.WHITE_BOLD);
-            choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O: "
+            choice = Util.readString(Util.RED_BOLD+"\tAre you sure you want to clear the database (Y)ES / (N)O:"
                       +Util.WHITE_BOLD);
         }
         
@@ -192,7 +192,7 @@ public class AdminController {
      */
     private void menu() {
         char c;
-        while ((c = Util.readChoice("\t"+"Admin System (c/g/p/r/s/x): ")) != 'x') {
+        while ((c = Util.readChoice("\t"+"Admin System (c/g/p/r/s/x):")) != 'x') {
             switch (c) {
                case 'c':
                     clear();

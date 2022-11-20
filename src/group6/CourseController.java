@@ -145,7 +145,7 @@ public class CourseController {
      */
     private void menu() {
         char c;
-        while ((c = Util.readChoice("\t\tStudent Course Menu(c/e/r/s/x): ")) != 'x') {
+        while ((c = Util.readChoice("\t\tStudent Course Menu(c/e/r/s/x):")) != 'x') {
             switch (c) {
                 case 'c':
                     change();

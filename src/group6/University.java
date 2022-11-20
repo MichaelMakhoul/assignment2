@@ -41,7 +41,7 @@ public class University {
      */
     private void menu() throws StringIndexOutOfBoundsException{
         char c;
-        while ((c = Util.readChoice("University System: (A)dmin, (S)tudent, or X: ")) != 'X') {
+        while ((c = Util.readChoice("University System: (A)dmin, (S)tudent, or X:")) != 'X') {
             switch (c) {
                 case 'A':
                     adminSystem();

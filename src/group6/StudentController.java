@@ -158,10 +158,11 @@ public class StudentController {
         String password;
         System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
         
-        while(checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")) && emailExists(email)){
-            register(email, password);
-            Util.updateFile(students);
+        while(!checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")) || !emailExists(email)){
         }
+        
+        register(email, password);
+        Util.updateFile(students);
         
     }
     
@@ -170,7 +171,7 @@ public class StudentController {
      */
     private void menu() {
         char c;
-        while ((c = Util.readChoice("\t"+ "Student System (l/r/x): ")) != 'x') {
+        while ((c = Util.readChoice("\t"+ "Student System (l/r/x):")) != 'x') {
             switch (c) {
                 case 'l':
                     login();
