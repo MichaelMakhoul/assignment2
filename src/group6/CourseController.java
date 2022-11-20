@@ -29,11 +29,7 @@ public class CourseController {
     public CourseController(int ID) {
         initList();
         this.student = setSession(ID);
-        try {
-            menu();   
-        } catch (StringIndexOutOfBoundsException e) {
-            System.out.println(Util.RED_BOLD+"\t\tUnknown command"+Util.WHITE_BOLD);
-        }
+        menu();   
     }
     
     /**
@@ -96,9 +92,9 @@ public class CourseController {
      * @return true or false
      */
     private boolean passwordMatch(String password, String confirm){        
-        boolean matches = password.equals(confirm);
+        boolean matches;
         
-        while(!password.equals(confirm)){
+        while(!(matches = password.equals(confirm))){
             System.out.println(Util.RED_BOLD+"\t\tPassword does not match - try again"+Util.WHITE_BOLD);
             confirm = Util.readString("\t\tConfirm Password: ");
         }

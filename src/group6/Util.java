@@ -17,8 +17,8 @@ public class Util {
     /**
      * Regex formats for email and password.
      */
-    public static final String emailRegex = ".*\\..*@university.com";
-    public static final String passwordRegex = "^[A-Z][a-z]{5,}[0-9]{3,}$";
+    public static final String emailRegex = "^[A-Za-z]*\\.[A-Za-z]*@university.com$";
+    public static final String passwordRegex = "^[A-Z][A-Za-z]{5,}[0-9]{3,}$";
 
     /**
      * A group of colours - used to change the output when the program displays
@@ -41,8 +41,9 @@ public class Util {
         String number;
 
         while (!(number = In.nextLine()).chars().allMatch(Character::isDigit) || number.isEmpty()) {
-            int tabs = prompt.lastIndexOf('\t');
-            String indent = prompt.substring(0, tabs + 1);
+            int tabs = (int) prompt.chars().filter(c -> c == '\t').count();
+            
+            String indent = prompt.substring(0, tabs);
 
             System.out.printf(RED_BOLD + indent + "%s %n" + WHITE_BOLD + "%s", "Invalid input", prompt);
         }

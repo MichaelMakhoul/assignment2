@@ -20,11 +20,7 @@ public class StudentController {
      */
     public StudentController() {
         initList();
-        try {
-            menu();   
-        } catch (StringIndexOutOfBoundsException e) {
-            System.out.println(Util.RED_BOLD+"\tUnknown command"+Util.WHITE_BOLD);
-        }
+        menu();   
     }
     
     /**
@@ -53,13 +49,15 @@ public class StudentController {
      * @return true or false.
      */
     private boolean emailExists(String email) {
-        boolean found = students.stream().anyMatch(p -> p.matchEmail(email));
+        Student student = students.stream().filter(p -> p.matchEmail(email)).findAny().orElse(null);
         
-        if (found){
-            System.out.println(Util.RED_BOLD+"\t"+"Email already exists"+Util.WHITE_BOLD);
+        if (student != null){
+            String name = student.getName();
+            System.out.println(Util.RED_BOLD+"\tStudent "+ name +" already exists"+Util.WHITE_BOLD);
+            return false;
+        } else {
+            return true;
         }
-        
-        return found;
     }
     
     /**
@@ -160,10 +158,11 @@ public class StudentController {
         String password;
         System.out.println(Util.GREEN_BOLD+"\t"+"Student Sign Up"+Util.WHITE_BOLD);
         
-        while(!checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")) || emailExists(email));
+        while(checkFormat(email = Util.readString("\tEmail: "), password = Util.readString("\tPassword: ")) && emailExists(email)){
+            register(email, password);
+            Util.updateFile(students);
+        }
         
-        register(email, password);
-        Util.updateFile(students);
     }
     
     /**

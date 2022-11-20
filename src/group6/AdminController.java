@@ -26,11 +26,7 @@ public class AdminController {
      */    
     public AdminController() {
         initList();
-        try {
-            menu();   
-        } catch (StringIndexOutOfBoundsException e) {
-            System.out.println(Util.RED_BOLD+"\tUnknown command"+Util.WHITE_BOLD);
-        }
+        menu();
     }
     
     /**
@@ -128,6 +124,7 @@ public class AdminController {
         List<Student> toDelete = students(ID);
         
         if(toDelete.size() > 0){
+            System.out.println(Util.YELLOW_BOLD+"\tRemoving student "+ID+" Account"+Util.WHITE_BOLD);
             students.removeAll(toDelete);
             Util.updateFile(students);
         } else {
@@ -141,7 +138,6 @@ public class AdminController {
     private void removeStudent(){
         int ID = Util.readNumber("\tRemove by ID: ");
         removeStudent(ID);
-        System.out.println(Util.YELLOW_BOLD+"\tRemoving student "+ID+" Account"+Util.WHITE_BOLD);
     }
     
     /**
